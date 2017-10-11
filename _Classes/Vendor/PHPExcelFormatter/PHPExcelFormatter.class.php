@@ -260,10 +260,11 @@ class PHPExcelFormatter
                         // Columns are not
                         throw new PHPExcelFormatterException('Columns are not set.');
                     }
-
+					
                     // Search column number for this column
                     $colNo = $this->_columnNumbers[$colIdentifier];
-
+					
+                    
                     // Check if found column no
                     if (!(is_int($colNo) && $colNo >= 0)) {
                         throw new PHPExcelFormatterException('Field '.$colIdentifier.' not found.');

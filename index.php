@@ -1,6 +1,7 @@
 <?php
 use comideafactory\Files\Import\ArcecImport;
 use comideafactory\Files\ExcelFile;
+use comideafactory\Database\MySQLConnexion;
 
 /**
 * @name index.php Dispatcher principal de l'application
@@ -23,17 +24,9 @@ if(file_exists("base.xls")){
 require_once("_Classes/Files/Import/ArcecImport.class.php");
 require_once("_Classes/Files/ExcelFile.class.php");
 
-/*
-$excel = new ExcelFile("test", "Files/", "xslx");
-if(!$excel->isCorrectFile()){
-	echo "KO, on ne peut pas traiter le document Excel";
-	echo $excel->errors();
-} else {
-	echo "OK, on peut traiter le document Excel";
-}
+require_once("_Classes/Database/MySQLConnexion.class.php");
 
-die();
-*/
+$connexion = new MySQLConnexion();
 
 // Instancie un nouvel objet pour le traitement d'un document Excel
 $arcec = new ArcecImport();
@@ -44,7 +37,7 @@ if($arcec->isCorrectFile()){
 	$arcec->process();
 	
 	// Fin de traitement, on dumpe la résultat
-	$arcec->dump();
+	//$arcec->dump();
 } else {
 	echo "Impossible de traiter le document Excel.";
 	echo $arcec->errors();

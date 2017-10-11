@@ -14,6 +14,7 @@ require_once(dirname(__FILE__) . "/../Import.class.php");
 use comideafactory\Files\ExcelFile;
 use comideafactory\Files\Import;
 use RKD\PHPExcelFormatter\PHPExcelFormatter;
+use comideafactory\Models\Scheme;
 
 class ArcecImport extends ExcelFile implements Import {
 	
@@ -32,14 +33,14 @@ class ArcecImport extends ExcelFile implements Import {
 	protected $output;
 	
 	public function __construct(){
-		parent::__construct("Base_Arcec", "Files/", "xslx");
+		parent::__construct("base", "Files/", "xlsx");
 		
 		if($this->isCorrectFile){
 			// Définit les colonnes à importer
 			$this->addColumn("N°");
-			$this->addColumn("Nom");
-			$this->addColumn("Date");
-			$this->addColumn("Conseiller");
+			$this->addColumn("NOM");
+			$this->addColumn("Portable");
+			$this->addColumn("E-mail");
 		}
 	}
 	
@@ -67,13 +68,17 @@ class ArcecImport extends ExcelFile implements Import {
 	 */
 	public function process(){
 		if($this->isCorrectFile){
-			require_once(dirname(__FILE__) . "/../../Vendor/PhpExcelFormatter/PHPExcelFormatter.class.php");
-			require_once(dirname(__FILE__) . "/../../Vendor/PhpExcelFormatter/Exception/PHPExcelFormatterException.class.php");
+			require_once(dirname(__FILE__) . "/../../Vendor/PHPExcel/PHPExcel.php");
+			require_once(dirname(__FILE__) . "/../../Vendor/PHPExcelFormatter/PHPExcelFormatter.class.php");
+			require_once(dirname(__FILE__) . "/../../Vendor/PHPExcelFormatter/Exception/PHPExcelFormatterException.class.php");
 			
 			$formatter = new PHPExcelFormatter($this->path . $this->name . "." . $this->extension);
 			$formatter->setFormatterColumns($this->columns);
 			
 			$this->output = $formatter->output($this->outputType);
+			
+			// On peut procéder à la mise à jour de la base de données
+			$this->toSQL();
 			
 		}
 	}
@@ -83,5 +88,32 @@ class ArcecImport extends ExcelFile implements Import {
 	 */
 	public function dump(){
 		var_dump($this->output);
+	}
+	
+	private function toSQL(){
+		require_once(dirname(__FILE__) . "/../../Models/Dossier/Scheme.class.php");
+		$scheme = new Scheme();
+		
+		$insertRows = array();
+		$insertRow = array();
+		
+		// Définit le mappage entre le document Excel et les colonnes SQL
+		$scheme->addMap("N°", "id")
+			->addMap("NOM", "nom")
+			->addMap("Portable", "portable")
+			->addMap("E-mail", "email");
+		
+		foreach($this->output as $row){
+			foreach($row as $excelCol => $value){
+				$object = $scheme->find($excelCol);
+				$object->value($value);
+				$insertRow[] = $object;
+			}
+			$insertRows[] = $insertRow;
+			$insertRow = array(); // Réinitialise le tableau pour une ligne
+		}
+		
+		// En sortie de traitement, toutes les lignes sont mappées
+		$scheme->save($insertRows);
 	}
 }

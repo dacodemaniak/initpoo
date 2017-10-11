@@ -64,8 +64,6 @@ abstract class Files {
 			$this->errors["-10001"] = "Le document " . $this->path . $this->name . "." . $this->extension . " n'existe pas ou n'est pas situé dans le dossier spécifié";
 			$this->isCorrectFile = false;
 		} else {
-			echo "Cherche " . $this->extension . " dans<br />\n";
-			var_dump($this->extensionsAllowed);
 			if(!in_array($this->extension, $this->extensionsAllowed)){
 				$this->isCorrectFile = false;
 				$this->errors["-10002"] = "Un document avec une extension " . $this->extension . " n'est pas autorisé.";
@@ -109,8 +107,8 @@ abstract class Files {
 		//$fullFileName = "c:\\webroot\\initpoo.dev\\_repository\\Base_Arcec.xslx";
 		//$fullFileName = "http://initpoo.dev/Files/base.xslx";
 		//echo "Chemin : " . $fullFileName . "(" . $_SERVER["PHP_SELF"] . ")<br />\n";
-		return true;
-		//return file_exists($fullFileName);
+		//return true;
+		return file_exists($fullFileName);
 	}
 	
 	/**
