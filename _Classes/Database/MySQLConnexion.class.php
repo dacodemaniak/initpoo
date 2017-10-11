@@ -27,6 +27,10 @@ class MySQLConnexion extends Connexion {
 		);
 	}
 	
+	public function __destruct(){
+		$this->connInstance = null;
+	}
+		
 	/**
 	 * 
 	 * {@inheritDoc}
