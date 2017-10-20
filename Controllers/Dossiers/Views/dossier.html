@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+
+        <title>Javascript - Objet</title>
+
+        <script src="./modelPerson.js"></script>
+    </head>
+
+    <body>
+        <div class="jumbotron" id="person">
+
+        </div>
+
+        <script>
+            Person.setQualite('Formateur Javascript');
+            document.getElementById('person').innerHTML = Person.getPerson();
+        </script>
+    </body>
+</html>

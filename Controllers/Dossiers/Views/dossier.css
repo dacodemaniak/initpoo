@@ -1,0 +1,186 @@
+@CHARSET "utf-8";
+
+body{
+	font-size: 1em;
+}
+
+table tbody tr.odd{
+	background-color: rgba(66, 133, 244, .7);
+}
+
+/* Règle d'alternance de couleurs
+table tbody tr:nth-child(even){
+	background-color: rgba(66, 133, 244, .7);
+}
+ */
+
+ .table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #d4c6c6;
+}
+
+table tbody tr.fadeout{
+	animation-name: fadeout;
+	animation-duration: 2s;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+}
+/**
+* Tableau
+**/
+table{
+	width: 100%;
+}
+
+table thead tr th {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 1.2em;
+}
+
+table tbody tr.modified{
+	background-color: rgba(128, 128, 128, .5);
+}
+/**
+* Toast
+**/
+div#toast.inactive {
+	visibility: hidden;
+}
+div#toast.active{
+	animation-name: fadein;
+	animation-duration: 1s;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;	
+}
+
+div#toast.toast{
+	position: fixed;
+	top: 0;
+}
+div#outer-modal.inactive{
+	visibility: hidden;
+	z-index: 0;
+}
+
+/**
+div#outer-modal.dismiss{
+	animation-name: dismiss;
+	animation-duration: 2s;
+	animation-iteration-count: 1;
+	animation-fill-mode: backwards;
+}
+**/
+
+div#outer-modal{
+	position: fixed;
+	z-index: 999;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	background-color: transparent;
+}
+
+div#inner-modal{
+	position: relative;
+	z-index:1000;
+	top: 50%;
+	left: 50%;
+	background-color: inherit;
+	height: 32px;
+	width: 32px;
+}
+/**
+* Animations
+**/
+@keyframes fadeout{
+	0%{
+		opacity: 1;
+	}
+	
+	25%{
+		opacity: 0.7;
+	}
+	
+	50%{
+		opacity: 0.5;
+	}
+	
+	75%{
+		opacity: 0.3;
+	}
+	100%{
+		opacity: 0;
+	}
+}
+
+@keyframes fadein{
+	0%{
+		opacity: .1;
+		left: 10%;
+	}
+	
+	25%{
+		opacity: 0.3;
+		left: 20%;
+	}
+	
+	50%{
+		opacity: 0.5;
+		left: 30%;
+	}
+	
+	75%{
+		opacity: 0.7;
+		left: 50%;
+	}
+	100%{
+		opacity: 1;
+	}
+}
+
+@keyframes dismiss{
+	0%{
+		height: 100%;
+		width: 100%;
+	}
+	10%{
+		height: 90%;
+		width: 90%;
+	}	
+	20%{
+		height: 80%;
+		width: 80%;
+	}
+	30%{
+		height: 70%;
+		width: 70%;
+	}
+	40%{
+		height: 60%;
+		width: 60%;
+	}	
+	50%{
+		height: 50%;
+		width: 50%;
+	}
+	60%{
+		height: 40%;
+		width: 40%;
+	}
+	70%{
+		height: 30%;
+		width: 30%;
+	}	
+	80%{
+		height: 30%;
+		width: 30%;
+	}
+	90%{
+		height: 10%;
+		width: 10%;
+	}
+	100%{
+		height: 0%;
+		width: 0%;
+	}
+}

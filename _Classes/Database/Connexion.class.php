@@ -59,7 +59,15 @@ abstract class Connexion {
 		
 		$this->config = json_decode($content);
 	}
-		
+	
+	/**
+	 * Retourne l'instance de connexion à la base de données
+	 * @return PDO
+	 */
+	public function getInstance(){
+		return $this->connInstance;
+	}
+	
 	/**
 	 * Abstraction de méthode de connexion à implémenter dans les classes filles
 	 */

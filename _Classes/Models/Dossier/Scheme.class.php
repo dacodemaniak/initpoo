@@ -45,7 +45,7 @@ class Scheme {
 		$sqlStatement = substr($sqlStatement, 0, strlen($sqlStatement) - 1);
 		
 		// A partir de quelle table ?
-		$sqlStatement .= " FROM  " . $this->name . ";";
+		$sqlStatement .= " FROM  " . $this->name . " ORDER BY " . $this->_getPK() . ";";
 
 		// Exécution de la requête
 		require_once(dirname(__FILE__) . "/../../Database/MySQLConnexion.class.php");
@@ -95,6 +95,23 @@ class Scheme {
 		return $clone;
 	}
 	
+	public function delete($dossiers){
+		$sqlStatement = "DELETE FROM " . $this->name . " WHERE " . $this->_getPK() . "=:id;";
+		// Préparation de la requête
+		require_once(dirname(__FILE__) . "/../../Database/MySQLConnexion.class.php");
+		$connexion = new MySQLConnexion();
+		$connexion->connect();
+		$instance = $connexion->getInstance();
+		
+		$statement = $instance->prepare($sqlStatement);
+
+		// On boucle sur les identifiants pour les supprimer
+		foreach($dossiers as $dossier){
+			$value["id"] = $dossier->id;
+			$statement->execute($value);
+		}
+	}
+
 	public function save($rows){
 		$sqlStatement = "INSERT INTO " . $this->name . "(";
 		
@@ -159,6 +176,16 @@ class Scheme {
 		
 		return true;
 	}
+
+	private function _getPK(){
+		foreach($this->columns as $column){
+			if($column->isPK()){
+				$primaryKeyName = $column->name();
+				break;
+			}
+		}
+		return $primaryKeyName;		
+	}
 	/**
 	 * Définit le schéma de la table courante (colonne, type)
 	 */
@@ -194,6 +221,14 @@ class Scheme {
 		->isPK(false)
 		->length(75)
 		->setType("varchar");
+		
+		$this->columns[] = $column;
+
+		$column = new SQLColumn();
+		$column->name("last_update")
+		->isPK(false)
+		->length(75)
+		->setType("date");
 		
 		$this->columns[] = $column;
 	}

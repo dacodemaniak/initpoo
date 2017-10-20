@@ -90,6 +90,9 @@ class ArcecImport extends ExcelFile implements Import {
 		var_dump($this->output);
 	}
 	
+	/**
+	 * Mappe le contenu original vers la base de données pour insertion
+	 */
 	private function toSQL(){
 		require_once(dirname(__FILE__) . "/../../Models/Dossier/Scheme.class.php");
 		$scheme = new Scheme();
@@ -107,9 +110,11 @@ class ArcecImport extends ExcelFile implements Import {
 			foreach($row as $excelCol => $value){
 				$object = $scheme->find($excelCol);
 				$object->value($value);
+				
 				$insertRow[] = $object;
 			}
-			$insertRows[] = $insertRow;
+			
+			$insertRows[] = $insertRow; // Range la ligne dans un autre tableau
 			$insertRow = array(); // Réinitialise le tableau pour une ligne
 		}
 		
